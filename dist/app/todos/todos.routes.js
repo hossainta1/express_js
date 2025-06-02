@@ -53,6 +53,12 @@ exports.todosRouter.put("/update-todo/:id", (req, res) => __awaiter(void 0, void
     const id = req.params.id;
     const db = yield mongodb_1.client.db("todosDB");
     const collection = yield db.collection("todos");
+    const { title, description, priority, isCompleted } = req.body;
+    const filter = { _id: new mongodb_2.ObjectId(id) };
+    const updatedTodo = yield collection.updateOne(filter, {
+        $set: { title, description, priority, isCompleted },
+    }, { upsert: true });
+    res.json(updatedTodo);
 }));
 // Delete todo
 exports.todosRouter.delete("/delete-todo/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

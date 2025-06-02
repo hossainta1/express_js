@@ -51,7 +51,17 @@ todosRouter.put("/update-todo/:id", async (req: Request, res: Response) => {
   const id = req.params.id;
   const db = await client.db("todosDB");
   const collection = await db.collection("todos");
+  const { title, description, priority, isCompleted } = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const updatedTodo = await collection.updateOne(
+    filter,
+    {
+      $set: { title, description, priority, isCompleted },
+    },
+    { upsert: true }
+  );
 
+  res.json(updatedTodo)
 });
 
 // Delete todo
