@@ -28,9 +28,7 @@ todosRouter.post("/create-todo", async (req: Request, res: Response) => {
     priority: priority,
     isCompleted: false,
   });
-  // const data = req.body;
-  // console.log(data);
-  // const todos = collection.find({});
+
   const cursor = collection.find({});
   const todos = await cursor.toArray();
 
@@ -44,12 +42,27 @@ todosRouter.get("/:id", async (req: Request, res: Response) => {
   const db = await client.db("todosDB");
   const collection = await db.collection("todos");
   const todo = await collection.findOne({ _id: new ObjectId(id) });
-  res.json(todo)
+  res.json(todo);
 });
 
-// Update todo 
+// Update todo
 
 todosRouter.put("/update-todo/:id", async (req: Request, res: Response) => {
-  
+  const id = req.params.id;
+  const db = await client.db("todosDB");
+  const collection = await db.collection("todos");
 
-})
+});
+
+// Delete todo
+
+todosRouter.delete("/delete-todo/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const db = await client.db("todosDB");
+  const collection = await db.collection("todos");
+
+  await collection.deleteOne({ _id: new ObjectId(id) });
+  res.json({
+    message: "Deleted Successfully",
+  });
+});

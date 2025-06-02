@@ -36,9 +36,6 @@ exports.todosRouter.post("/create-todo", (req, res) => __awaiter(void 0, void 0,
         priority: priority,
         isCompleted: false,
     });
-    // const data = req.body;
-    // console.log(data);
-    // const todos = collection.find({});
     const cursor = collection.find({});
     const todos = yield cursor.toArray();
     res.json(todos);
@@ -51,6 +48,19 @@ exports.todosRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     const todo = yield collection.findOne({ _id: new mongodb_2.ObjectId(id) });
     res.json(todo);
 }));
-// Update todo 
+// Update todo
 exports.todosRouter.put("/update-todo/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const db = yield mongodb_1.client.db("todosDB");
+    const collection = yield db.collection("todos");
+}));
+// Delete todo
+exports.todosRouter.delete("/delete-todo/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const db = yield mongodb_1.client.db("todosDB");
+    const collection = yield db.collection("todos");
+    yield collection.deleteOne({ _id: new mongodb_2.ObjectId(id) });
+    res.json({
+        message: "Deleted Successfully",
+    });
 }));
